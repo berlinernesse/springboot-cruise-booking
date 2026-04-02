@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cruises</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
+<main class="page">
+    <section class="section">
+        <h1 class="section__title">All Cruises</h1>
+
+        <div class="cards">
+            <div class="card" th:each="c : ${cruises}">
+                <img th:src="@{/images/card1.png}" alt="Cruise image" class="card__img">
+
+                <h3 class="card__title" th:text="${c.cruiseName}">Cruise Name</h3>
+
+                <p class="card__meta">
+                    <span th:text="${c.origin}">Origin</span>
+                    →
+                    <span th:text="${c.destination}">Destination</span>
+                </p>
+
+                <p class="card__price">
+                    $<span th:text="${c.price}">0</span>
+                </p>
+
+                <a th:href="@{/reservation/new(cruiseId=${c.cruiseId})}" class="btn card__btn">Book now</a>
+            </div>
+
+            <p class="muted" th:if="${cruises == null or #lists.isEmpty(cruises)}">
+                No cruises found. If you’re hardcoding/ seeding, this is where we check next.
+            </p>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+</body>
+</html>

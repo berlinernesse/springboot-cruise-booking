@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Payment</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
+<main class="page auth-page">
+    <section class="auth-card auth-card--wide">
+        <h1 class="auth-title">Payment</h1>
+        <p class="auth-subtitle">Review your booking and choose a payment method.</p>
+
+        <div class="card" style="margin-bottom: 24px;">
+            <h3 class="card__title" th:text="${booking.cruise.cruiseName}">Cruise Name</h3>
+
+            <p class="card__meta">
+                <strong>Reference:</strong>
+                <span th:text="${booking.bookingReference}">ABC123</span>
+            </p>
+
+            <p class="card__meta">
+                <strong>Route:</strong>
+                <span th:text="${booking.cruise.origin}">Origin</span>
+                →
+                <span th:text="${booking.cruise.destination}">Destination</span>
+            </p>
+
+            <p class="card__meta">
+                <strong>Departure:</strong>
+                <span th:text="${#temporals.format(booking.cruise.departureTime, 'MMMM dd, yyyy - hh:mm a')}">Date</span>
+            </p>
+
+            <p class="card__meta">
+                <strong>Return:</strong>
+                <span th:text="${#temporals.format(booking.cruise.arrivalTime, 'MMMM dd, yyyy - hh:mm a')}">Date</span>
+            </p>
+
+            <p class="card__meta">
+                <strong>Cabin:</strong>
+                <span th:text="${booking.cabinType}">Interior</span>
+            </p>
+
+            <p class="card__meta">
+                <strong>Adults:</strong>
+                <span th:text="${booking.adults}">1</span>
+            </p>
+
+            <p class="card__meta">
+                <strong>Children:</strong>
+                <span th:text="${booking.children}">0</span>
+            </p>
+
+            <p class="card__meta">
+                <strong>Total Passengers:</strong>
+                <span th:text="${booking.noOfPassengers}">1</span>
+            </p>
+
+            <p class="card__price">
+                Total Price: $<span th:text="${#numbers.formatDecimal(booking.totalPrice, 1, 2)}">0.00</span>
+            </p>
+        </div>
+
+        <form th:action="@{/payment}" method="post" class="auth-form">
+            <input type="hidden" name="bookingId" th:value="${booking.bookingId}">
+
+            <div class="form-group">
+                <label>Select payment method</label>
+
+                <div class="payment-options">
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="CARD" required>
+                        Credit / Debit Card
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="PAYPAL">
+                        PayPal
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="APPLE_PAY">
+                        Apple Pay
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="GOOGLE_PAY">
+                        Google Pay
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cardName">Cardholder Name</label>
+                <input class="auth-input" type="text" id="cardName" placeholder="Name on card">
+            </div>
+
+            <div class="form-group">
+                <label for="cardNumber">Card Number</label>
+                <input class="auth-input" type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
+            </div>
+
+            <div class="auth-form auth-form--grid">
+                <div class="form-group">
+                    <label for="expiry">Expiry Date</label>
+                    <input class="auth-input" type="text" id="expiry" placeholder="MM/YY">
+                </div>
+
+                <div class="form-group">
+                    <label for="cvv">CVV</label>
+                    <input class="auth-input" type="text" id="cvv" placeholder="123">
+                </div>
+            </div>
+
+            <div class="form-group form-group--full" style="margin-top: 18px;">
+                <button type="submit" class="btn auth-btn">Confirm Payment</button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+
+</body>
+</html>

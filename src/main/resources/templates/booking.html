@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Reservation</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
+<main class="page auth-page">
+    <section class="auth-card auth-card--wide">
+        <h1 class="auth-title">Cruise Reservation</h1>
+        <p class="auth-subtitle">Complete your reservation details below.</p>
+
+        <div class="card" style="margin-bottom: 24px;">
+            <img th:src="@{/images/card1.png}" alt="Cruise image" class="card__img">
+            <h3 class="card__title" th:text="${cruise.cruiseName}">Cruise Name</h3>
+            <p class="card__meta">
+                <span th:text="${cruise.origin}"></span>
+                →
+                <span th:text="${cruise.destination}"></span>
+            </p>
+            <p class="card__price">$<span th:text="${cruise.price}"></span></p>
+        </div>
+
+        <form th:action="@{/reservation(cruiseId=${cruise.cruiseId})}"
+              th:object="${booking}"
+              method="post"
+              class="auth-form auth-form--grid">
+
+            <div class="form-group">
+                <label for="departureDate">Departure date</label>
+                <input class="auth-input" type="date" id="departureDate" th:field="*{departureDate}">
+                <small class="form-error" th:if="${#fields.hasErrors('departureDate')}" th:errors="*{departureDate}"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="returnDate">Return date</label>
+                <input class="auth-input" type="date" id="returnDate" th:field="*{returnDate}">
+                <small class="form-error" th:if="${#fields.hasErrors('returnDate')}" th:errors="*{returnDate}"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="cabinType">Cabin type</label>
+                <select class="auth-input" id="cabinType" th:field="*{cabinType}">
+                    <option value="">Select cabin type</option>
+                    <option value="Interior">Interior</option>
+                    <option value="Ocean View">Ocean View</option>
+                    <option value="Balcony">Balcony</option>
+                    <option value="Suite">Suite</option>
+                </select>
+                <small class="form-error" th:if="${#fields.hasErrors('cabinType')}" th:errors="*{cabinType}"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="adults">Adults</label>
+                <input class="auth-input" type="number" id="adults" th:field="*{adults}" min="1">
+                <small class="form-error" th:if="${#fields.hasErrors('adults')}" th:errors="*{adults}"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="children">Children</label>
+                <input class="auth-input" type="number" id="children" th:field="*{children}" min="0">
+                <small class="form-error" th:if="${#fields.hasErrors('children')}" th:errors="*{children}"></small>
+            </div>
+
+            <div class="form-group form-group--full">
+                <button type="submit" class="btn auth-btn">Continue to Payment</button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+
+</body>
+</html>

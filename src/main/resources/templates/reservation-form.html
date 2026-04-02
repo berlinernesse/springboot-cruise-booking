@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cruise Reservation</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
+<main class="page auth-page">
+    <section class="auth-card auth-card--wide">
+        <h1 class="auth-title">Cruise Reservation</h1>
+        <p class="auth-subtitle">Complete your reservation details below.</p>
+
+        <div class="card" style="margin-bottom: 24px;">
+            <img th:src="@{/images/card1.png}" alt="Cruise image" class="card__img">
+
+            <h3 class="card__title" th:text="${cruise.cruiseName}">Cruise Name</h3>
+
+            <p class="card__meta">
+                <strong>Route:</strong>
+                <span th:text="${cruise.origin}">Origin</span>
+                →
+                <span th:text="${cruise.destination}">Destination</span>
+            </p>
+
+            <p class="card__meta">
+                <strong>Departure:</strong>
+                <span th:text="${#temporals.format(cruise.departureTime, 'MMM dd, yyyy - hh:mm a')}">Jul 12, 2026</span>
+            </p>
+
+            <p class="card__meta">
+                <strong>Return:</strong>
+                <span th:text="${#temporals.format(cruise.arrivalTime, 'MMM dd, yyyy - hh:mm a')}">Jul 16, 2026</span>
+            </p>
+
+            <p class="card__meta">
+                <strong>Itinerary:</strong>
+                Premium K-pop performances at sea, themed activities, and luxury onboard experiences.
+            </p>
+
+            <p class="card__meta">
+                <strong>Amenities:</strong>
+                Pool deck concerts, fan events, dining, lounge access, and entertainment shows.
+            </p>
+
+            <p class="card__price">
+                Base price: $<span th:text="${cruise.price}">0</span>
+            </p>
+        </div>
+
+        <form th:action="@{/reservation/new(cruiseId=${cruise.cruiseId})}"
+              th:object="${booking}"
+              method="post"
+              class="auth-form auth-form--grid">
+
+            <div class="form-group form-group--full">
+                <label for="cabinType">Cabin type</label>
+                <select class="auth-input" id="cabinType" th:field="*{cabinType}">
+                    <option value="">Select cabin type</option>
+                    <option value="Interior">Interior</option>
+                    <option value="Ocean View">Ocean View</option>
+                    <option value="Balcony">Balcony</option>
+                    <option value="Suite">Suite</option>
+                </select>
+                <small class="form-error" th:if="${#fields.hasErrors('cabinType')}" th:errors="*{cabinType}"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="adults">Adults</label>
+                <input class="auth-input" type="number" id="adults" th:field="*{adults}" min="1">
+                <small class="form-error" th:if="${#fields.hasErrors('adults')}" th:errors="*{adults}"></small>
+            </div>
+
+            <div class="form-group">
+                <label for="children">Children</label>
+                <input class="auth-input" type="number" id="children" th:field="*{children}" min="0">
+                <small class="form-error" th:if="${#fields.hasErrors('children')}" th:errors="*{children}"></small>
+            </div>
+
+            <div class="form-group form-group--full">
+                <button type="submit" class="btn auth-btn">Continue to Payment</button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+
+</body>
+</html>

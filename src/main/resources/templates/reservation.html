@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>My Reservations</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
+<main class="page">
+    <section class="section">
+        <h1 class="section__title">My Reservations</h1>
+
+        <p th:if="${message}" style="color:green; font-weight:600;" th:text="${message}"></p>
+        <p th:if="${error}" class="form-error" th:text="${error}"></p>
+
+        <p class="muted" th:if="${bookings == null or #lists.isEmpty(bookings)}">
+            You do not have any reservations yet.
+        </p>
+
+        <!-- PENDING PAYMENT -->
+        <div th:if="${bookings != null and !#lists.isEmpty(bookings)}" class="section">
+            <h2 class="section__title">Pending Payment</h2>
+
+            <div class="cards">
+                <div class="card"
+                     th:each="b : ${bookings}"
+                     th:if="${b.status == 'PENDING_PAYMENT'}">
+
+                    <h3 class="card__title" th:text="${b.cruise.cruiseName}">Cruise Name</h3>
+
+                    <p class="card__meta">
+                        <strong>Reference:</strong>
+                        <span th:text="${b.bookingReference}">ABC123</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Route:</strong>
+                        <span th:text="${b.cruise.origin}">Origin</span>
+                        →
+                        <span th:text="${b.cruise.destination}">Destination</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Departure:</strong>
+                        <span th:text="${#temporals.format(b.departureDate, 'MMMM dd, yyyy')}">May 18, 2026</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Return:</strong>
+                        <span th:text="${#temporals.format(b.cruise.arrivalTime, 'MMMM dd, yyyy')}">May 24, 2026</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Cabin:</strong>
+                        <span th:text="${b.cabinType}">Balcony</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Passengers:</strong>
+                        <span th:text="${b.adults}">1</span> adults,
+                        <span th:text="${b.children}">0</span> children
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Status:</strong>
+                        <span>Pending Payment</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Payment Method:</strong>
+                        <span>Not paid yet</span>
+                    </p>
+
+                    <p class="card__price">
+                        $<span th:text="${#numbers.formatDecimal(b.totalPrice,1,2)}">0.00</span>
+                    </p>
+
+                    <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+                        <a th:href="@{/payment(bookingId=${b.bookingId})}" class="btn">
+                            Complete Payment
+                        </a>
+
+                        <a th:href="@{/reservation/edit(bookingId=${b.bookingId})}" class="btn">
+                            Edit Reservation
+                        </a>
+
+                        <a th:href="@{/reservation/cancel(bookingId=${b.bookingId})}"
+                           class="btn"
+                           onclick="return confirm('Are you sure you want to cancel this reservation?');">
+                            Cancel Reservation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONFIRMED RESERVATIONS -->
+        <div th:if="${bookings != null and !#lists.isEmpty(bookings)}" class="section">
+            <h2 class="section__title">Confirmed Reservations</h2>
+
+            <div class="cards">
+                <div class="card"
+                     th:each="b : ${bookings}"
+                     th:if="${b.status == 'CONFIRMED'}">
+
+                    <h3 class="card__title" th:text="${b.cruise.cruiseName}">Cruise Name</h3>
+
+                    <p class="card__meta">
+                        <strong>Reference:</strong>
+                        <span th:text="${b.bookingReference}">ABC123</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Route:</strong>
+                        <span th:text="${b.cruise.origin}">Origin</span>
+                        →
+                        <span th:text="${b.cruise.destination}">Destination</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Departure:</strong>
+                        <span th:text="${#temporals.format(b.departureDate, 'MMMM dd, yyyy')}">May 18, 2026</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Return:</strong>
+                        <span th:text="${#temporals.format(b.cruise.arrivalTime, 'MMMM dd, yyyy')}">May 24, 2026</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Cabin:</strong>
+                        <span th:text="${b.cabinType}">Balcony</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Passengers:</strong>
+                        <span th:text="${b.adults}">1</span> adults,
+                        <span th:text="${b.children}">0</span> children
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Status:</strong>
+                        <span>Confirmed</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Payment Method:</strong>
+                        <span th:text="${b.paymentMethod}">PAYPAL</span>
+                    </p>
+
+                    <p class="card__price">
+                        $<span th:text="${#numbers.formatDecimal(b.totalPrice,1,2)}">0.00</span>
+                    </p>
+
+                    <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+                        <a th:href="@{/reservation/edit(bookingId=${b.bookingId})}" class="btn">
+                            Edit Reservation
+                        </a>
+
+                        <a th:href="@{/reservation/cancel(bookingId=${b.bookingId})}"
+                           class="btn"
+                           onclick="return confirm('Are you sure you want to cancel this reservation?');">
+                            Cancel Reservation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CANCELLED RESERVATIONS -->
+        <div th:if="${bookings != null and !#lists.isEmpty(bookings)}" class="section">
+            <h2 class="section__title">Cancelled Reservations</h2>
+
+            <div class="cards">
+                <div class="card"
+                     th:each="b : ${bookings}"
+                     th:if="${b.status == 'CANCELLED'}">
+
+                    <h3 class="card__title" th:text="${b.cruise.cruiseName}">Cruise Name</h3>
+
+                    <p class="card__meta">
+                        <strong>Reference:</strong>
+                        <span th:text="${b.bookingReference}">ABC123</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Route:</strong>
+                        <span th:text="${b.cruise.origin}">Origin</span>
+                        →
+                        <span th:text="${b.cruise.destination}">Destination</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Departure:</strong>
+                        <span th:text="${#temporals.format(b.departureDate, 'MMMM dd, yyyy')}">May 18, 2026</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Return:</strong>
+                        <span th:text="${#temporals.format(b.cruise.arrivalTime, 'MMMM dd, yyyy')}">May 24, 2026</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Cabin:</strong>
+                        <span th:text="${b.cabinType}">Balcony</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Passengers:</strong>
+                        <span th:text="${b.adults}">1</span> adults,
+                        <span th:text="${b.children}">0</span> children
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Status:</strong>
+                        <span>Cancelled</span>
+                    </p>
+
+                    <p class="card__meta">
+                        <strong>Payment Method:</strong>
+
+                        <span th:if="${b.paymentMethod == null}">Not paid yet</span>
+                        <span th:if="${b.paymentMethod == 'CARD'}">Credit / Debit Card</span>
+                        <span th:if="${b.paymentMethod == 'PAYPAL'}">PayPal</span>
+                        <span th:if="${b.paymentMethod == 'APPLE_PAY'}">Apple Pay</span>
+                        <span th:if="${b.paymentMethod == 'GOOGLE_PAY'}">Google Pay</span>
+                    </p>
+
+                    <p class="card__price">
+                        $<span th:text="${#numbers.formatDecimal(b.totalPrice,1,2)}">0.00</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:24px;">
+            <a th:href="@{/cruises}" class="btn">Browse Cruises</a>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+
+</body>
+</html>

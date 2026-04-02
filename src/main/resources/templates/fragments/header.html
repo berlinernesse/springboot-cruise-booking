@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <header th:fragment="siteHeader">
+        <nav class="nav">
+            <div class="nav__brand">
+                <a th:href="@{/}" class="nav__link">
+                    <span class="nav__logo">🌊</span>
+                    <span class="nav__title">Kpop Cruise Booking</span>
+                </a>
+            </div>
+
+            <div class="nav__links">
+
+                <a th:href="@{/}" class="nav__link">Home</a>
+                <a th:href="@{/cruises}" class="nav__link">Cruises</a>
+
+                <!-- IF NOT LOGGED IN -->
+                <div th:if="${session.loggedInCustomer == null}">
+                    <a th:href="@{/login}" class="nav__link nav__link--ghost">Log in</a>
+                    <a th:href="@{/register}" class="nav__btn">Create account</a>
+                </div>
+
+                <!-- IF LOGGED IN -->
+                <div th:if="${session.loggedInCustomer != null}">
+                    <div th:if="${session.loggedInCustomer != null}" class="nav__links">
+
+                        <a th:href="@{/reservation}" class="nav__link">Reservation</a>
+
+                        <a th:href="@{/profile}" class="nav__link">Profile</a>
+
+                        <span class="nav__user">
+                            Welcome, <span th:text="${session.loggedInCustomer.firstName}"></span>
+                        </span>
+
+                        <a th:href="@{/logout}" class="nav__btn">Log out</a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </nav>
+    </header>
+</body>
+</html>

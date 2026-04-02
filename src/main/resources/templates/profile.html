@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
+<main class="page auth-page">
+  <section class="auth-card auth-card--wide">
+    <h1 class="auth-title">My Profile</h1>
+    <p class="auth-subtitle">View and update your personal information.</p>
+
+    <p th:if="${param.success}" style="color:green; font-weight:600;">
+      Profile updated successfully.
+    </p>
+
+    <form th:action="@{/profile}" th:object="${customer}" method="post" class="auth-form auth-form--grid">
+      <input type="hidden" th:field="*{customerId}">
+
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input class="auth-input" type="text" id="firstName" th:field="*{firstName}">
+        <small class="form-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input class="auth-input" type="text" id="lastName" th:field="*{lastName}">
+        <small class="form-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></small>
+      </div>
+
+      <div class="form-group form-group--full">
+        <label for="birthDate">Birth Date</label>
+        <input class="auth-input" type="date" id="birthDate" th:field="*{birthDate}">
+        <small class="form-error" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></small>
+      </div>
+
+      <div class="form-group form-group--full">
+        <label for="email">Email</label>
+        <input class="auth-input" type="email" id="email" th:field="*{email}">
+        <small class="form-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+      </div>
+
+      <div class="form-group form-group--full">
+        <label for="password">Password</label>
+        <input class="auth-input" type="password" id="password" th:field="*{password}">
+        <small class="form-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
+      </div>
+
+      <div class="form-group form-group--full">
+        <label for="address">Address</label>
+        <input class="auth-input" type="text" id="address" th:field="*{address}">
+        <small class="form-error" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="city">City</label>
+        <input class="auth-input" type="text" id="city" th:field="*{city}">
+        <small class="form-error" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="postalCode">Postal Code</label>
+        <input class="auth-input" type="text" id="postalCode" th:field="*{postalCode}">
+        <small class="form-error" th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}"></small>
+      </div>
+
+      <div class="form-group form-group--full" style="margin-top: 18px; display:flex; gap:12px; flex-wrap:wrap;">
+        <button type="submit" class="btn auth-btn">Save Profile</button>
+        <a th:href="@{/reservation}" class="btn">Back to Reservations</a>
+      </div>
+    </form>
+  </section>
+</main>
+
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+
+</body>
+</html>

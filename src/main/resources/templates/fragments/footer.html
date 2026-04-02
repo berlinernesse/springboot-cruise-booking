@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="siteFooter" class="footer">
+    <p class="footer__text">
+        © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2026</span>
+        Kpop Cruise Booking • Enterprise App Dev project
+    </p>
+</footer>
+</body>
+</html>

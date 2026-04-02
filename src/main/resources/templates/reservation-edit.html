@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Reservation</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
+<main class="page auth-page">
+  <section class="auth-card auth-card--wide">
+    <h1 class="auth-title">Edit Reservation</h1>
+    <p class="auth-subtitle">Update your cabin type and passenger count.</p>
+
+    <p class="form-error" th:if="${error}" th:text="${error}"></p>
+
+    <div class="card" style="margin-bottom: 24px;">
+      <h3 class="card__title" th:text="${booking.cruise.cruiseName}">Cruise Name</h3>
+
+      <p class="card__meta">
+        <strong>Reference:</strong>
+        <span th:text="${booking.bookingReference}">ABC123</span>
+      </p>
+
+      <p class="card__meta">
+        <strong>Route:</strong>
+        <span th:text="${booking.cruise.origin}">Origin</span>
+        →
+        <span th:text="${booking.cruise.destination}">Destination</span>
+      </p>
+
+      <p class="card__meta">
+        <strong>Departure:</strong>
+        <span th:text="${#temporals.format(booking.departureDate, 'MMMM dd, yyyy')}">May 18, 2026</span>
+      </p>
+
+      <p class="card__meta">
+        <strong>Return:</strong>
+        <span th:text="${#temporals.format(booking.cruise.arrivalTime, 'MMMM dd, yyyy')}">May 24, 2026</span>
+      </p>
+
+      <p class="card__meta">
+        <strong>Status:</strong>
+        <span th:text="${booking.status}">CONFIRMED</span>
+      </p>
+    </div>
+
+    <form th:action="@{/reservation/edit}" method="post" class="auth-form auth-form--grid">
+      <input type="hidden" name="bookingId" th:value="${booking.bookingId}">
+
+      <div class="form-group form-group--full">
+        <label for="cabinType">Cabin Type</label>
+        <select class="auth-input" id="cabinType" name="cabinType" required>
+          <option value="Interior" th:selected="${booking.cabinType == 'Interior'}">Interior</option>
+          <option value="Ocean View" th:selected="${booking.cabinType == 'Ocean View'}">Ocean View</option>
+          <option value="Balcony" th:selected="${booking.cabinType == 'Balcony'}">Balcony</option>
+          <option value="Suite" th:selected="${booking.cabinType == 'Suite'}">Suite</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="adults">Adults</label>
+        <input class="auth-input"
+               type="number"
+               id="adults"
+               name="adults"
+               min="1"
+               max="10"
+               th:value="${booking.adults}"
+               required>
+      </div>
+
+      <div class="form-group">
+        <label for="children">Children</label>
+        <input class="auth-input"
+               type="number"
+               id="children"
+               name="children"
+               min="0"
+               max="10"
+               th:value="${booking.children}"
+               required>
+      </div>
+
+      <div class="form-group form-group--full" style="margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap;">
+        <button type="submit" class="btn auth-btn">Save Changes</button>
+        <a th:href="@{/reservation}" class="btn">Back to Reservations</a>
+      </div>
+    </form>
+  </section>
+</main>
+
+<div th:replace="~{fragments/footer :: siteFooter}"></div>
+
+</body>
+</html>
